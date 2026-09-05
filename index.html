@@ -1431,7 +1431,13 @@
       return;
     }
     try{
-      var cfg = Function('"use strict"; return (' + text + ');')();
+      var extracted = text;
+      var braceStart = extracted.indexOf('{');
+      var braceEnd = extracted.lastIndexOf('}');
+      if(braceStart !== -1 && braceEnd !== -1 && braceEnd > braceStart){
+        extracted = extracted.slice(braceStart, braceEnd + 1);
+      }
+      var cfg = Function('"use strict"; return (' + extracted + ');')();
       if(!cfg || !cfg.databaseURL){
         throw new Error('databaseURLが見つかりません');
       }
